@@ -1,0 +1,11 @@
+# PyTorch는 별도 설치 (Blackwell sm_120 → cu128 빌드):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+opencv-python>=4.5
+numpy
+scipy
+matplotlib
+pandas
+tqdm
+pyyaml
+faiss-cpu
+einops

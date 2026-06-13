@@ -1,0 +1,16 @@
+dataset,condition,model,config,R@1,R@5,R@10,note
+nordland,winter-vs-summer,eigenplaces,base,63.65,77.77,83.34,module-A showcase
+nordland,winter-vs-summer,eigenplaces,+A(seqslam-offline),97.09,98.05,98.29,+33.44 R@1
+nordland,winter-vs-summer,eigenplaces,+A(forward-online),91.76,94.21,95.54,causal variant
+nordland,winter-vs-summer,salad,base,86.46,93.85,95.90,stronger descriptor
+nordland,winter-vs-summer,salad,+A(seqslam-offline),98.98,99.30,99.39,+12.52 R@1
+svox,sun,eigenplaces,base,85.25,93.44,95.90,module-B (mild appearance)
+svox,sun,eigenplaces,+B(k20-a0.7),85.48,93.68,96.14,+0.23 R@1
+svox,overcast,eigenplaces,base,92.55,97.13,98.17,
+svox,overcast,eigenplaces,+B(k5-a0.5),94.38,97.13,97.13,+1.83 R@1 (best module-B)
+svox,night,eigenplaces,base,59.78,77.89,83.48,extreme appearance
+svox,night,eigenplaces,+B(k5-a0.9),59.90,77.89,77.89,+0.12 (SIFT fails)
+st_lucia,day,eigenplaces,base,99.52,99.93,100.00,EXCLUDED ceiling
+svox,sun,eigenplaces,+B-adaptive(ours),85.60,,,no-regression fusion
+svox,overcast,eigenplaces,+B-adaptive(ours),93.81,,,best vs fixed-a
+svox,night,eigenplaces,+B-adaptive(ours),59.90,,,fixed-a regresses here

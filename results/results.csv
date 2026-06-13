@@ -1,0 +1,11 @@
+date,cfg_hash,dataset,model,module_a,module_b,thresh_m,n_db,n_q,R@1,R@5,R@10,ms_per_query
+2026-06-08 01:19:56,32c9fcf9,st_lucia,eigenplaces,False,False,25.0,1549,1464,99.52,99.93,100.0,0.0119
+2026-06-08 01:34:16,973d9b2f,nordland,eigenplaces,False,False,25.0,27592,27592,63.65,77.77,83.34,0.152
+2026-06-08 01:43:10,7c3a04d6,nordland,eigenplaces,True,False,25.0,27592,27592,97.09,98.05,98.29,1.9522
+2026-06-08 01:45:19,7c3a04d6,nordland,eigenplaces,True,False,25.0,27592,27592,91.76,94.21,95.54,0.5606
+2026-06-08 01:58:02,fc07f234,svox,eigenplaces,False,False,25.0,17166,854,85.25,93.44,95.9,0.0696
+2026-06-08 01:58:09,fc07f234,svox,eigenplaces,False,False,25.0,17166,872,92.55,97.13,98.17,0.0693
+2026-06-08 01:58:15,fc07f234,svox,eigenplaces,False,False,25.0,17166,823,59.78,77.89,83.48,0.0701
+2026-06-08 02:04:41,a434fc4a,svox,eigenplaces,False,True,25.0,17166,854,78.92,93.09,95.55,128.6888
+2026-06-08 02:13:13,3e33d313,nordland,salad,False,False,25.0,27592,27592,86.46,93.85,95.9,0.1116
+2026-06-08 02:14:47,0f12607d,nordland,queries,salad,True,False,25.0,27592,27592,98.98,99.3,99.39,1.9234

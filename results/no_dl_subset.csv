@@ -1,0 +1,7 @@
+condition,R@1,geo_ms_per_query,note
+geometric only (no deep learning),30.75,382.6,SIFT inliers query-vs-all; 382 ms is for 400 DB (~26 s for full 27k)
+geometric only + temporal,89.25,,temporal lifts a weak base
+deep descriptor (frozen),96.00,,same 400-image task
+deep + temporal,100.00,,
+deep + geometric re-rank,95.75,,geometry adds nothing on a strong descriptor
+deep + geometric + temporal,100.00,,

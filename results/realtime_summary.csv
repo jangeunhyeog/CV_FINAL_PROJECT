@@ -1,0 +1,6 @@
+method,R@1,R@5,R@10,ms_per_query,causal_realtime,note
+base (single-frame),63.65,77.77,83.34,0.08,yes,no post-processing
+temporal offline (SeqSLAM),97.09,98.05,98.29,1.78,no,needs +-10 frame look-ahead
+temporal offline (Viterbi),98.69,,,0.41,no,whole sequence (MAP path)
+temporal online (forward; v=1; tau=0.15),98.76,99.07,99.24,0.46,yes,real-time; constant-velocity assumption
+temporal online (forward; v=1-3; tau=0.05),88.94,91.99,93.64,0.44,yes,relaxed motion model (speed uncertainty)

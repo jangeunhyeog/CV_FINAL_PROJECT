@@ -9,6 +9,10 @@ no-regression contribution that makes the geometric step safe to use.
 > signal is the **temporal (sequence) prior** (+12 to +33 R@1), while geometric
 > verification is **marginal on a strong foundation descriptor** (+0 to +1.8 R@1) and
 > can even *hurt* unless its weight is made confidence-adaptive.
+>
+> **Real-time angle:** the temporal prior also has a **causal online** form that is
+> real-time (**0.46 ms/query**) yet reaches **98.76 R@1** on Nordland — see
+> [`docs/REALTIME.md`](docs/REALTIME.md).
 
 ---
 
@@ -126,6 +130,32 @@ condition with no regression.
 Full numeric tables, latency, and the similarity-matrix view are in
 [`docs/RESULTS.md`](docs/RESULTS.md) and [`results/results_summary.csv`](results/results_summary.csv).
 
+### 4.5 Real-time analysis and why the learned descriptor matters
+
+Motivated by robotics (online, within the camera frame budget), the temporal prior has a
+**causal online** form that is real-time **and** the most accurate:
+
+| method (Nordland, EigenPlaces) | R@1 | latency | real-time |
+|---|---|---|---|
+| single-frame (base) | 63.65 | 0.08 ms | yes |
+| + temporal, offline (SeqSLAM) | 97.09 | 1.78 ms | no |
+| **+ temporal, online (forward)** | **98.76** | **0.46 ms** | **yes** |
+
+![accuracy vs latency](results/figures/fig_realtime_accuracy_vs_latency.png)
+
+A **no-deep-learning** baseline isolates the descriptor's contribution: on the *same*
+400-image task, pure geometric matching reaches only **30.75 R@1** vs **96.0** for the
+frozen descriptor (+65 R@1), and geometric-only retrieval is orders of magnitude slower
+(not real-time at scale). The same lesson explains why the classic SeqSLAM (raw-pixel base)
+was limited on Nordland: post-processing only amplifies the signal the base already has.
+
+![why deep learning](results/figures/fig_why_deeplearning.png)
+
+Details, latency budget, descriptor-training background, prior-work numbers and honest
+caveats: [`docs/REALTIME.md`](docs/REALTIME.md),
+[`results/realtime_summary.csv`](results/realtime_summary.csv),
+[`results/no_dl_subset.csv`](results/no_dl_subset.csv).
+
 ## 5. Reproducing the experiments
 
 > Hardware note: developed on an RTX 5070 Ti (Blackwell, `sm_120`), which requires a
@@ -161,6 +191,11 @@ python src/rerank_sweep.py --dataset vpr-datasets-downloader/datasets/svox \
 # 6) adaptive-fusion analysis + all figures
 python src/gated_analysis.py
 python src/make_figures.py && python src/make_qualitative.py && python src/make_slide_figures.py
+
+# 7) real-time analysis + why-deep-learning baseline (see docs/REALTIME.md)
+python src/eval_realtime.py                 # online vs offline temporal: R@1 + latency
+SUBSET_M=400 STRIDE=20 python src/eval_no_dl.py    # geometric-only vs deep, same task
+python src/make_realtime_figures.py
 ```
 
 Every run appends one row to `results/results.csv` (config hash, metrics, latency).
@@ -174,7 +209,8 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 ├── requirements.txt
 ├── docs/
 │   ├── METHOD.md          # equations for Modules A, B and the adaptive fusion
-│   └── RESULTS.md         # full result tables, latency, analysis
+│   ├── RESULTS.md         # full result tables, latency, analysis
+│   └── REALTIME.md        # real-time (online) analysis + why-deep-learning baseline
 ├── src/
 │   ├── extract_features.py   # frozen model loading → L2-normalized descriptors (.npy)
 │   ├── eval_recall.py        # similarity matrix → Recall@K (shared interface)
@@ -183,11 +219,15 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── rerank_geometric.py   # Module B: SIFT + ratio test + MAGSAC inliers
 │   ├── rerank_sweep.py       # offline α/K sweep over cached inliers
 │   ├── gated_analysis.py     # adaptive confidence-weighted fusion (contribution)
+│   ├── eval_realtime.py      # accuracy vs latency table (online vs offline temporal)
+│   ├── eval_no_dl.py         # geometric-only vs frozen descriptor (why deep learning)
 │   ├── run_experiment.py     # one config → full pipeline → results.csv
 │   └── make_*.py             # figure generation
 ├── results/
 │   ├── results.csv           # append-only experiment log
 │   ├── results_summary.csv   # curated headline numbers
+│   ├── realtime_summary.csv  # online/offline temporal: R@1 + latency
+│   ├── no_dl_subset.csv      # geometric-only vs deep (same task)
 │   └── figures/              # all figures used above
 └── vpr-datasets-downloader/  # third-party dataset tool (scripts only, see section 7)
 

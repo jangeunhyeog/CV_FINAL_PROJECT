@@ -116,7 +116,46 @@ frozen deep descriptor is exactly what makes the same temporal idea succeed here
 caveat: those AUC/PR numbers are **not** directly comparable to our R@1 @ 25 m and are
 quoted only as context.)
 
-## 7. Honest caveats (for the write-up / Q&A)
+## 7. A fully-classical alternative base (CLAHE + HOG + sequence)
+
+SeqSLAM's weakness was its **per-image base** (raw downsampled pixels + SAD). A natural
+training-free upgrade is **CLAHE** (contrast normalization) → **HOG** (gradient/structure
+descriptor) → match feature vectors → align with the temporal filter (or DTW, which also
+handles variable speed). This keeps the pipeline **100% non-deep-learning**.
+
+![classical base ladder](../results/figures/fig_classical_base.png)
+
+**Descriptor quality (single-frame, 400-image subset):** raw-pixel SAD **15** → CLAHE+HOG
+**76** → deep **96**. HOG is a large upgrade over raw pixels, as expected.
+
+**Full Nordland (27 k), non-saturated:**
+
+| base | single | + SeqSLAM | + online (real-time) |
+|---|---|---|---|
+| CLAHE + HOG (no deep learning) | 25.32 | 93.95 | **96.09** (0.58 ms/q) |
+| deep descriptor (frozen) | 63.65 | 97.09 | **98.76** (0.46 ms/q) |
+
+Takeaways (honest):
+- The **fully-classical CLAHE+HOG + online temporal** pipeline reaches **96.1 R@1** in
+  real time — a big jump over raw-pixel SeqSLAM (~78% AUC) and a credible training-free
+  baseline.
+- **But the deep descriptor still wins** (98.76 vs 96.09), and the gap is decisive
+  **single-frame** (63.65 vs 25.32): HOG gets to 96% by leaning almost entirely on the
+  sequence prior (+71), so it is **fragile** wherever that assumption weakens (variable
+  speed, gaps, non-sequential / kidnapped-robot queries), whereas the deep descriptor is
+  **robust without the sequence crutch**.
+- **DTW** handles variable speed (a plus over fixed-velocity SeqSLAM) but is **offline**
+  (needs the whole sequence, pinned endpoints), so it does not fit the real-time online
+  setting; on the small 1:1-aligned subset the ordering constraint is so strong that
+  +SeqSLAM/+DTW saturate for every base (an artifact — the single-frame column is the
+  reliable descriptor-quality comparison). None of HOG/GIST/DTW are novel (e.g.,
+  OpenSeqSLAM already offers a HOG option); this is a controlled "stronger classical base"
+  study, not a new method.
+
+Code: [`src/eval_classical_base.py`](../src/eval_classical_base.py);
+numbers: [`results/classical_base.csv`](../results/classical_base.csv).
+
+## 8. Honest caveats (for the write-up / Q&A)
 
 - Both post-processing modules are **non-deep-learning**; the deep model is frozen and used
   zero-shot (trained on SF-XL / GSV-Cities, not on the test sets).
@@ -137,6 +176,9 @@ python src/eval_realtime.py
 
 # no-deep-learning geometric baseline vs deep, on a strided subset
 python src/eval_no_dl.py            # STRIDE/SUBSET_M are environment variables
+
+# classical base ladder (raw-pixel SAD vs CLAHE+HOG vs deep; single / +SeqSLAM / +DTW)
+python src/eval_classical_base.py
 
 # figures
 python src/make_realtime_figures.py

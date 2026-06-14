@@ -88,7 +88,38 @@ def fig_latency_budget():
     print("saved fig_latency_budget.png")
 
 
+def fig_classical_base():
+    """고전 base 사다리: (좌) 단독 descriptor 품질, (우) 전체 Nordland HOG vs 딥 +시간."""
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.5, 4.6))
+    # 좌: 단독 single-frame 품질 (400장 부분집합)
+    names = ["raw-pixel\nSAD", "CLAHE+HOG", "deep\n(frozen)"]
+    vals = [15.0, 76.0, 96.0]; cols = [RED, ORANGE, BLUE]
+    ax1.bar(range(3), vals, color=cols, width=0.6)
+    for i, v in enumerate(vals):
+        ax1.text(i, v + 1.5, f"{v:.0f}", ha="center", fontsize=12, fontweight="bold")
+    ax1.set_xticks(range(3)); ax1.set_xticklabels(names, fontsize=10)
+    ax1.set_ylim(0, 108); ax1.set_ylabel("R@1 (%)", fontsize=11)
+    ax1.set_title("Single-frame descriptor quality\n(400-img subset): HOG >> raw pixels", fontsize=11)
+    ax1.grid(axis="y", alpha=0.3)
+    # 우: 전체 Nordland, HOG vs deep, 단계별
+    stages = ["single", "+SeqSLAM", "+online\n(real-time)"]
+    hog = [25.32, 93.95, 96.09]; deep = [63.65, 97.09, 98.76]
+    x = np.arange(3); w = 0.36
+    ax2.bar(x - w/2, hog, w, label="CLAHE+HOG (no deep learning)", color=ORANGE)
+    ax2.bar(x + w/2, deep, w, label="deep (frozen)", color=BLUE)
+    for i in range(3):
+        ax2.text(x[i]-w/2, hog[i]+1.5, f"{hog[i]:.1f}", ha="center", fontsize=9, color=ORANGE, fontweight="bold")
+        ax2.text(x[i]+w/2, deep[i]+1.5, f"{deep[i]:.1f}", ha="center", fontsize=9, color=BLUE, fontweight="bold")
+    ax2.set_xticks(x); ax2.set_xticklabels(stages, fontsize=10)
+    ax2.set_ylim(0, 112); ax2.set_ylabel("R@1 (%)", fontsize=11); ax2.legend(fontsize=9, loc="lower right")
+    ax2.set_title("Full Nordland: classical base + sequence is good,\nbut deep wins and is far more robust single-frame", fontsize=11)
+    ax2.grid(axis="y", alpha=0.3)
+    plt.tight_layout(); plt.savefig(f"{FIG}/fig_classical_base.png", dpi=150); plt.close()
+    print("saved fig_classical_base.png")
+
+
 if __name__ == "__main__":
     fig_accuracy_vs_latency()
     fig_why_deeplearning()
     fig_latency_budget()
+    fig_classical_base()

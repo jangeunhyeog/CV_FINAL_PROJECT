@@ -151,10 +151,18 @@ was limited on Nordland: post-processing only amplifies the signal the base alre
 
 ![why deep learning](results/figures/fig_why_deeplearning.png)
 
+A **fully-classical** alternative base (CLAHE + HOG, replacing SeqSLAM's raw-pixel SAD) was
+also tested: with the temporal filter it reaches **96.1 R@1** in real time (no deep
+learning at all), but the frozen deep descriptor still wins (98.8) and is far more robust
+single-frame (63.65 vs 25.32) — i.e. HOG leans almost entirely on the sequence prior.
+
+![classical base ladder](results/figures/fig_classical_base.png)
+
 Details, latency budget, descriptor-training background, prior-work numbers and honest
 caveats: [`docs/REALTIME.md`](docs/REALTIME.md),
 [`results/realtime_summary.csv`](results/realtime_summary.csv),
-[`results/no_dl_subset.csv`](results/no_dl_subset.csv).
+[`results/no_dl_subset.csv`](results/no_dl_subset.csv),
+[`results/classical_base.csv`](results/classical_base.csv).
 
 ## 5. Reproducing the experiments
 
@@ -195,6 +203,7 @@ python src/make_figures.py && python src/make_qualitative.py && python src/make_
 # 7) real-time analysis + why-deep-learning baseline (see docs/REALTIME.md)
 python src/eval_realtime.py                 # online vs offline temporal: R@1 + latency
 SUBSET_M=400 STRIDE=20 python src/eval_no_dl.py    # geometric-only vs deep, same task
+python src/eval_classical_base.py           # raw-pixel SAD vs CLAHE+HOG vs deep ladder
 python src/make_realtime_figures.py
 ```
 
@@ -221,6 +230,7 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── gated_analysis.py     # adaptive confidence-weighted fusion (contribution)
 │   ├── eval_realtime.py      # accuracy vs latency table (online vs offline temporal)
 │   ├── eval_no_dl.py         # geometric-only vs frozen descriptor (why deep learning)
+│   ├── eval_classical_base.py # raw-pixel SAD vs CLAHE+HOG vs deep (single/+SeqSLAM/+DTW)
 │   ├── run_experiment.py     # one config → full pipeline → results.csv
 │   └── make_*.py             # figure generation
 ├── results/
@@ -228,6 +238,7 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── results_summary.csv   # curated headline numbers
 │   ├── realtime_summary.csv  # online/offline temporal: R@1 + latency
 │   ├── no_dl_subset.csv      # geometric-only vs deep (same task)
+│   ├── classical_base.csv    # raw-pixel SAD vs CLAHE+HOG vs deep ladder
 │   └── figures/              # all figures used above
 └── vpr-datasets-downloader/  # third-party dataset tool (scripts only, see section 7)
 

@@ -1,0 +1,6 @@
+setting,base,single_R1,seqslam_R1,dtw_R1,online_R1,note
+subset-400 (1:1 aligned),raw-pixel SAD,15.0,97.5,100.0,,sequence/DTW columns saturate (small aligned subset artifact)
+subset-400 (1:1 aligned),CLAHE+HOG,76.0,100.0,94.0,,single-frame column is the reliable descriptor-quality comparison
+subset-400 (1:1 aligned),deep (frozen),96.0,100.0,99.5,,
+full Nordland (27k),CLAHE+HOG,25.32,93.95,,96.09,fully-classical real-time pipeline (0.58 ms/query)
+full Nordland (27k),deep (frozen),63.65,97.09,,98.76,deep wins and is far more robust single-frame

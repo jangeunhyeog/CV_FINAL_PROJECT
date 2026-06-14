@@ -1,0 +1,7 @@
+deep_weight_a,single_frame_R1,online_forward_R1,note
+1.0,63.65,96.81,deep only
+0.9,66.33,,
+0.7,71.67,,
+0.5,74.96,98.91,best fusion (+11.3 single-frame over deep alone)
+0.3,71.15,,
+0.0,25.32,96.09,HOG only

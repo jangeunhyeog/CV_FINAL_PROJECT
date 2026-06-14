@@ -158,6 +158,12 @@ single-frame (63.65 vs 25.32) — i.e. HOG leans almost entirely on the sequence
 
 ![classical base ladder](results/figures/fig_classical_base.png)
 
+Used differently — **fused into** the deep descriptor (training-free score fusion) — the
+hand-crafted HOG cue is **complementary** and lifts **single-frame** R@1 from 63.65 to
+**74.96 (+11.3)**, useful where the temporal prior cannot help (relocalization).
+
+![descriptor fusion](results/figures/fig_descriptor_fusion.png)
+
 Details, latency budget, descriptor-training background, prior-work numbers and honest
 caveats: [`docs/REALTIME.md`](docs/REALTIME.md),
 [`results/realtime_summary.csv`](results/realtime_summary.csv),
@@ -204,6 +210,7 @@ python src/make_figures.py && python src/make_qualitative.py && python src/make_
 python src/eval_realtime.py                 # online vs offline temporal: R@1 + latency
 SUBSET_M=400 STRIDE=20 python src/eval_no_dl.py    # geometric-only vs deep, same task
 python src/eval_classical_base.py           # raw-pixel SAD vs CLAHE+HOG vs deep ladder
+python src/eval_descriptor_fusion.py        # deep + CLAHE/HOG score fusion (alpha sweep)
 python src/make_realtime_figures.py
 ```
 
@@ -231,6 +238,7 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── eval_realtime.py      # accuracy vs latency table (online vs offline temporal)
 │   ├── eval_no_dl.py         # geometric-only vs frozen descriptor (why deep learning)
 │   ├── eval_classical_base.py # raw-pixel SAD vs CLAHE+HOG vs deep (single/+SeqSLAM/+DTW)
+│   ├── eval_descriptor_fusion.py # training-free deep + CLAHE/HOG score fusion
 │   ├── run_experiment.py     # one config → full pipeline → results.csv
 │   └── make_*.py             # figure generation
 ├── results/
@@ -239,6 +247,7 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── realtime_summary.csv  # online/offline temporal: R@1 + latency
 │   ├── no_dl_subset.csv      # geometric-only vs deep (same task)
 │   ├── classical_base.csv    # raw-pixel SAD vs CLAHE+HOG vs deep ladder
+│   ├── deep_hog_fusion.csv   # deep + HOG score fusion (alpha sweep)
 │   └── figures/              # all figures used above
 └── vpr-datasets-downloader/  # third-party dataset tool (scripts only, see section 7)
 

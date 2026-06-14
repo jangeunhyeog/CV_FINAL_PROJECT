@@ -118,8 +118,29 @@ def fig_classical_base():
     print("saved fig_classical_base.png")
 
 
+def fig_descriptor_fusion():
+    """deep + (CLAHE+HOG) 점수 융합 — 단독 R@1 vs deep 가중치 a (전체 Nordland)."""
+    a = [0.0, 0.3, 0.5, 0.7, 0.9, 1.0]
+    r1 = [25.32, 71.15, 74.96, 71.67, 66.33, 63.65]
+    fig, ax = plt.subplots(figsize=(7.4, 4.6))
+    ax.plot(a, r1, "-o", color=BLUE, lw=2, ms=7)
+    ax.scatter([1.0], [63.65], s=120, color=GREY, zorder=5, label="deep only (a=1)")
+    ax.scatter([0.0], [25.32], s=120, color=RED, zorder=5, label="HOG only (a=0)")
+    ax.scatter([0.5], [74.96], s=200, color=GREEN, marker="*", zorder=6, label="best fusion (a=0.5)")
+    ax.annotate("74.96  (+11.3 over deep)", (0.5, 74.96), textcoords="offset points",
+                xytext=(6, 10), fontsize=11, fontweight="bold", color=GREEN)
+    ax.set_xlabel("fusion weight on deep descriptor  (a)", fontsize=12)
+    ax.set_ylabel("single-frame R@1 (%)", fontsize=12)
+    ax.set_ylim(20, 82); ax.grid(alpha=0.3); ax.legend(fontsize=10, loc="lower center")
+    ax.set_title("Training-free descriptor fusion: deep + CLAHE/HOG\n"
+                 "a hand-crafted cue is complementary, lifting single-frame R@1 by +11", fontsize=11.5)
+    plt.tight_layout(); plt.savefig(f"{FIG}/fig_descriptor_fusion.png", dpi=150); plt.close()
+    print("saved fig_descriptor_fusion.png")
+
+
 if __name__ == "__main__":
     fig_accuracy_vs_latency()
     fig_why_deeplearning()
     fig_latency_budget()
     fig_classical_base()
+    fig_descriptor_fusion()

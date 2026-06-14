@@ -155,6 +155,30 @@ Takeaways (honest):
 Code: [`src/eval_classical_base.py`](../src/eval_classical_base.py);
 numbers: [`results/classical_base.csv`](../results/classical_base.csv).
 
+### 7.1 Better use of HOG: fuse it *into* the descriptor (training-free)
+
+Rather than using HOG as a separate (weaker) base, **fuse it with the frozen deep
+descriptor** at the score level (row min-max normalize each, then
+`fused = a·deep + (1-a)·HOG`). On full Nordland, the hand-crafted cue turns out
+**complementary** and lifts **single-frame** R@1:
+
+![descriptor fusion](../results/figures/fig_descriptor_fusion.png)
+
+| deep weight `a` | single-frame R@1 |
+|---|---|
+| 1.0 (deep only) | 63.65 |
+| **0.5 (deep + HOG)** | **74.96  (+11.3)** |
+| 0.0 (HOG only) | 25.32 |
+
+So a **completely training-free descriptor fusion** improves single-frame retrieval by
+**+11 R@1** — useful exactly where the temporal prior cannot help (relocalization / single
+shots). After the temporal filter both are near the ceiling (~97–99%), so the fusion's main
+value is at the **single-frame** level. (Caveat: the online numbers in `deep_hog_fusion.csv`
+use row-normalized scores, so the deep-only online value there, 96.81, is not the headline
+98.76 from §3 — single-frame is the clean comparison.) Code:
+[`src/eval_descriptor_fusion.py`](../src/eval_descriptor_fusion.py);
+numbers: [`results/deep_hog_fusion.csv`](../results/deep_hog_fusion.csv).
+
 ## 8. Honest caveats (for the write-up / Q&A)
 
 - Both post-processing modules are **non-deep-learning**; the deep model is frozen and used

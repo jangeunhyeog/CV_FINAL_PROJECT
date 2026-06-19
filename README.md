@@ -14,6 +14,12 @@ no-regression contribution that makes the geometric step safe to use.
 > real-time (**0.46 ms/query**) yet reaches **98.76 R@1** on Nordland — see
 > [`docs/REALTIME.md`](docs/REALTIME.md).
 
+📄 **Full write-up:** [`report/report_ko.md`](report/report_ko.md) — the complete report
+(Korean) tying the whole story together: the *replace-the-weak-base* ladder
+(raw-pixel SAD → CLAHE+HOG → frozen deep), DTW robustness cross-check, Deep+HOG
+single-frame fusion, Module A/B, and the **25 m vs 2.5 m (±1-frame) ground-truth
+threshold sensitivity** analysis. English LaTeX version under [`report/`](report/).
+
 ---
 
 ## 1. Motivation
@@ -227,6 +233,9 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── METHOD.md          # equations for Modules A, B and the adaptive fusion
 │   ├── RESULTS.md         # full result tables, latency, analysis
 │   └── REALTIME.md        # real-time (online) analysis + why-deep-learning baseline
+├── report/
+│   ├── report_ko.md       # full report (Korean): whole story end-to-end
+│   └── cvpr_latex/        # English CVPR-style LaTeX version (Overleaf-ready)
 ├── src/
 │   ├── extract_features.py   # frozen model loading → L2-normalized descriptors (.npy)
 │   ├── eval_recall.py        # similarity matrix → Recall@K (shared interface)
@@ -239,6 +248,7 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── eval_no_dl.py         # geometric-only vs frozen descriptor (why deep learning)
 │   ├── eval_classical_base.py # raw-pixel SAD vs CLAHE+HOG vs deep (single/+SeqSLAM/+DTW)
 │   ├── eval_descriptor_fusion.py # training-free deep + CLAHE/HOG score fusion
+│   ├── rescore_strict.py     # 25 m vs 2.5 m (±1-frame) threshold sensitivity (re-score only)
 │   ├── run_experiment.py     # one config → full pipeline → results.csv
 │   └── make_*.py             # figure generation
 ├── results/

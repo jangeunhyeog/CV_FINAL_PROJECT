@@ -14,6 +14,14 @@ no-regression contribution that makes the geometric step safe to use.
 > real-time (**0.46 ms/query**) yet reaches **98.76 R@1** on Nordland — see
 > [`docs/REALTIME.md`](docs/REALTIME.md).
 
+> 📄 **Report narrative:** for the full story (problem → SeqSLAM → *replace the weak base,
+> keep the sequence* → results → conclusion), with every figure and number, see
+> **[`docs/REPORT.md`](docs/REPORT.md)**. Storyline: classical sequence VPR (SeqSLAM) was
+> limited by a **weak raw-pixel base**, not by the sequence idea; a stronger base
+> (CLAHE+HOG, or a frozen deep descriptor) lifts the same sequence step to 96–99 R@1, DTW
+> adds robustness to **variable speed**, and a training-free **deep+HOG fusion** improves
+> the single-frame (relocalization) case by +11.3.
+
 📄 **Full write-up:** [`report/report_ko.md`](report/report_ko.md) — the complete report
 (Korean) tying the whole story together: the *replace-the-weak-base* ladder
 (raw-pixel SAD → CLAHE+HOG → frozen deep), DTW robustness cross-check, Deep+HOG
@@ -217,7 +225,9 @@ python src/eval_realtime.py                 # online vs offline temporal: R@1 + 
 SUBSET_M=400 STRIDE=20 python src/eval_no_dl.py    # geometric-only vs deep, same task
 python src/eval_classical_base.py           # raw-pixel SAD vs CLAHE+HOG vs deep ladder
 python src/eval_descriptor_fusion.py        # deep + CLAHE/HOG score fusion (alpha sweep)
-python src/make_realtime_figures.py
+python src/eval_threshold_sensitivity.py    # R@1 at 2.5/5/10/25 m (precision)
+python src/eval_dtw_robustness.py           # variable-speed robustness (why DTW)
+python src/make_realtime_figures.py && python src/make_report_figures.py
 ```
 
 Every run appends one row to `results/results.csv` (config hash, metrics, latency).
@@ -230,6 +240,7 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 ├── README.md
 ├── requirements.txt
 ├── docs/
+│   ├── REPORT.md          # >>> report writing guide (full narrative, all figures/numbers)
 │   ├── METHOD.md          # equations for Modules A, B and the adaptive fusion
 │   ├── RESULTS.md         # full result tables, latency, analysis
 │   └── REALTIME.md        # real-time (online) analysis + why-deep-learning baseline
@@ -248,6 +259,8 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── eval_no_dl.py         # geometric-only vs frozen descriptor (why deep learning)
 │   ├── eval_classical_base.py # raw-pixel SAD vs CLAHE+HOG vs deep (single/+SeqSLAM/+DTW)
 │   ├── eval_descriptor_fusion.py # training-free deep + CLAHE/HOG score fusion
+│   ├── eval_threshold_sensitivity.py # R@1 at 2.5/5/10/25 m (localization precision)
+│   ├── eval_dtw_robustness.py # variable-speed robustness (why DTW)
 │   ├── rescore_strict.py     # 25 m vs 2.5 m (±1-frame) threshold sensitivity (re-score only)
 │   ├── run_experiment.py     # one config → full pipeline → results.csv
 │   └── make_*.py             # figure generation
@@ -258,6 +271,8 @@ Descriptors are extracted once and cached under `cache/` for reuse.
 │   ├── no_dl_subset.csv      # geometric-only vs deep (same task)
 │   ├── classical_base.csv    # raw-pixel SAD vs CLAHE+HOG vs deep ladder
 │   ├── deep_hog_fusion.csv   # deep + HOG score fusion (alpha sweep)
+│   ├── threshold_sensitivity.csv # R@1 at 2.5/5/10/25 m
+│   ├── dtw_robustness.csv    # variable-speed aligner comparison
 │   └── figures/              # all figures used above
 └── vpr-datasets-downloader/  # third-party dataset tool (scripts only, see section 7)
 

@@ -1,0 +1,6 @@
+aligner,R1_2.5m,R1_25m,note
+single-frame (no temporal),86.40,93.40,reference
+forward fixed v=1 (constant-velocity),23.27,92.39,collapses under variable speed
+SeqSLAM (fixed velocity prior ~1),2.27,4.25,collapses (wrong diagonal slope)
+DTW (time-warp; no speed assumption),92.51,100.00,robust
+forward wide v=1..3,96.28,100.00,robust if motion model widened

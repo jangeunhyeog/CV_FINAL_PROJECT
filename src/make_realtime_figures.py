@@ -18,10 +18,10 @@ BLUE, ORANGE, GREY, GREEN, RED = "#2c7fb8", "#d95f0e", "#999999", "#1a8a2e", "#c
 
 # --- 검증값 (전체 Nordland, EigenPlaces frozen): (이름, R@1, ms/q, 색, 마커, 라벨오프셋, 화살표) ---
 RT = [
-    ("single-frame (base)", 63.65, 0.08, GREY, "o", (12, -2), False),
-    ("temporal OFFLINE (SeqSLAM)", 97.09, 1.78, ORANGE, "s", (-12, -26), True),
-    ("temporal OFFLINE (Viterbi)", 98.69, 0.41, ORANGE, "^", (-150, 22), True),
-    ("temporal ONLINE (causal = real-time)\n98.76% @ 0.46 ms", 98.76, 0.46, BLUE, "*", (20, -52), True),
+    ("single-frame (base)", 63.65, 0.08, GREY, "o", (14, -4), False),
+    ("temporal OFFLINE (SeqSLAM)", 97.09, 1.78, ORANGE, "s", (14, 6), True),
+    ("temporal OFFLINE (Viterbi)", 98.69, 0.41, ORANGE, "^", (-158, 16), True),
+    ("temporal ONLINE\n(causal = real-time)\n98.76% @ 0.46 ms", 98.76, 0.46, BLUE, "*", (-12, -88), True),
 ]
 # --- 검증값 (동일 400장 부분집합): 기하만 vs 딥러닝 ---
 GEO_ONLY, GEO_TEMPORAL, DEEP, DEEP_TEMPORAL = 30.75, 89.25, 96.0, 100.0
@@ -34,10 +34,11 @@ def fig_accuracy_vs_latency():
         ax.scatter(ms, r1, s=420 if m == "*" else 150, c=c, marker=m, zorder=4,
                    edgecolor="k", linewidth=0.7)
         ax.annotate(name, (ms, r1), textcoords="offset points", xytext=off, fontsize=10,
+                    ha="center" if m == "*" else "left",
                     fontweight="bold" if m == "*" else "normal",
                     arrowprops=dict(arrowstyle="->", color=c, lw=1.3) if arrow else None)
     ax.axhline(63.65, color=GREY, ls="--", lw=1, alpha=0.7)
-    ax.set_xscale("log"); ax.set_xlim(0.05, 4); ax.set_ylim(56, 106)
+    ax.set_xscale("log"); ax.set_xlim(0.05, 7); ax.set_ylim(56, 106)
     ax.set_xlabel("latency  (ms / query, log scale)", fontsize=12)
     ax.set_ylabel("R@1 (%)", fontsize=12)
     ax.set_title("Real-time temporal filtering on Nordland (EigenPlaces, frozen)\n"

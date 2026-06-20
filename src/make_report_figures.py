@@ -30,8 +30,8 @@ def fig_threshold():
     ax.grid(alpha=0.3); ax.legend(fontsize=10, loc="center right")
     ax.set_title("Localization precision (Nordland): temporal stays high even at strict 2.5 m\n"
                  "the sequence prior gives precise matches, not just loose ones", fontsize=11.5)
-    plt.tight_layout(); plt.savefig(f"{FIG}/fig_threshold_sensitivity.png", dpi=150); plt.close()
-    print("saved fig_threshold_sensitivity.png")
+    plt.tight_layout(); plt.savefig(f"{FIG}/fig_threshold_methods.png", dpi=150); plt.close()
+    print("saved fig_threshold_methods.png")
 
 
 def fig_dtw_robustness():

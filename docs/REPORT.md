@@ -90,7 +90,7 @@ distance threshold of the query. We use the standard **25 m** and also report a 
 
 ### 5.2 Localization precision — ground-truth tolerance (25 m vs 2.5 m)
 
-![threshold sensitivity](../results/figures/fig_threshold_sensitivity.png)
+![threshold sensitivity](../results/figures/fig_threshold_methods.png)
 
 | method | 2.5 m | 5 m | 10 m | 25 m |
 |---|---|---|---|---|
@@ -189,7 +189,7 @@ are complementary (deep+HOG fusion, +11.3 single-frame).
 | `qualitative_nordland.png` | §1/§2 (why single-frame fails: look-alike tracks) |
 | `nordland_heatmap.png` | §3/§4 (similarity matrix, diagonal structure) |
 | `fig_classical_base.png` | §5.1 (base ladder) |
-| `fig_threshold_sensitivity.png` | §5.2 (precision) |
+| `fig_threshold_methods.png` (online/HOG/fusion) · `fig_threshold_sensitivity.png` (base+SeqSLAM, report §6.8) | §5.2 (precision) |
 | `fig_dtw_robustness.png` | §5.3 (why DTW) |
 | `fig_realtime_accuracy_vs_latency.png`, `fig_latency_budget.png` | §5.4 (real-time) |
 | `fig_descriptor_fusion.png` | §5.5 (deep+HOG fusion) |

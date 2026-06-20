@@ -27,7 +27,8 @@ def fig_threshold():
         ax.plot(th, ys, st, color=c, lw=2, ms=7, label=name)
     ax.set_xticks(th); ax.set_xlabel("ground-truth tolerance (m)", fontsize=12)
     ax.set_ylabel("R@1 (%)", fontsize=12); ax.set_ylim(50, 102)
-    ax.grid(alpha=0.3); ax.legend(fontsize=10, loc="center right")
+    ax.grid(alpha=0.3)
+    ax.legend(fontsize=9.5, loc="center right", bbox_to_anchor=(0.985, 0.60), framealpha=0.92)
     ax.set_title("Localization precision (Nordland): temporal stays high even at strict 2.5 m\n"
                  "the sequence prior gives precise matches, not just loose ones", fontsize=11.5)
     plt.tight_layout(); plt.savefig(f"{FIG}/fig_threshold_methods.png", dpi=150); plt.close()

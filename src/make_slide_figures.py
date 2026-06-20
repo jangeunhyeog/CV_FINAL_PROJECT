@@ -82,7 +82,7 @@ def recall_bars_fixed():
         ax1.text(x[i] + w/2, plus_a[i] + 1.5, f"+{plus_a[i]-base_a[i]:.1f}", ha="center",
                  fontsize=11, color=BLUE, fontweight="bold")
     ax1.set_xticks(x); ax1.set_xticklabels(groups, fontsize=11)
-    ax1.set_ylim(0, 116); ax1.set_ylabel("R@1 (%)")
+    ax1.set_ylim(0, 124); ax1.set_ylabel("R@1 (%)")
     ax1.legend(loc="lower center", fontsize=10)
     ax1.set_title("Module A (temporal) — Nordland\nlarge, model-agnostic gain", fontsize=11)
     ax1.grid(axis="y", alpha=0.3)
@@ -96,8 +96,8 @@ def recall_bars_fixed():
         ax2.text(x2[i] + w/2, adap[i] + 1.5, f"+{adap[i]-base_b[i]:.1f}", ha="center",
                  fontsize=10, color=ORANGE, fontweight="bold")
     ax2.set_xticks(x2); ax2.set_xticklabels(CONDS, fontsize=11)
-    ax2.set_ylim(0, 116); ax2.set_ylabel("R@1 (%)")
-    ax2.legend(loc="upper right", fontsize=10)
+    ax2.set_ylim(0, 124); ax2.set_ylabel("R@1 (%)")
+    ax2.legend(loc="upper left", fontsize=9.5, framealpha=0.92)
     ax2.set_title("Module B (geometric) — SVOX\nmarginal on a strong descriptor", fontsize=11)
     ax2.grid(axis="y", alpha=0.3)
 
